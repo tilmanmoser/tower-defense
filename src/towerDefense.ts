@@ -9,6 +9,7 @@ export default class TowerDefense {
   lives: number;
   coins: number;
   currentTilePointer: { x: number; y: number } | undefined;
+  isCurrentTileRestricted: boolean = true;
 
   public constructor(props: {
     context: CanvasRenderingContext2D;
@@ -84,7 +85,9 @@ export default class TowerDefense {
 
   private drawSelectedTile() {
     if (this.currentTilePointer) {
-      this.context.fillStyle = `rgba(255,255,255,.5)`;
+      this.context.fillStyle = this.isCurrentTileRestricted
+        ? `rgba(255,0,0,.5)`
+        : `rgba(255,255,255,.5)`;
       this.context.fillRect(
         this.currentTilePointer.x * this.level.tiles.width,
         this.currentTilePointer.y * this.level.tiles.height,
@@ -108,6 +111,16 @@ export default class TowerDefense {
         ((ev.clientY - boundingRect.top) * scaleY) / this.level.tiles.height
       ),
     };
+
+    this.isCurrentTileRestricted = false;
+    this.level.restrictedTiles.forEach((tiles) => {
+      const currentTileIndex =
+        (this.currentTilePointer?.y || 0) * this.level.tiles.cols +
+        (this.currentTilePointer?.x || 0);
+      if (tiles[currentTileIndex] != 0) {
+        this.isCurrentTileRestricted = true;
+      }
+    });
   }
 
   private onPointerOut(ev: PointerEvent) {
