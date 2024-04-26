@@ -42,8 +42,6 @@ export default class Intruder {
   }
 
   public update() {
-    console.log("update intruder");
-
     const target = this.path[this.pathIndex];
     // orientate and move towards target
     const deltaX = target.x - this.position.x;
