@@ -10,11 +10,14 @@ export default class Turret {
   angle: number;
   position: { x: number; y: number };
   target: Intruder | undefined;
+  projectiles: {
+    speed: number;
+    offset: number;
+    damage: number;
+    reloading: number;
+  };
   projectile: Projectile | undefined;
-  speed: number;
-  offset: number;
-  damage: number;
-  reloading: number;
+  reloading!: number;
 
   public constructor(props: {
     context: CanvasRenderingContext2D;
@@ -23,9 +26,12 @@ export default class Turret {
     height: number;
     radius: number;
     position: { x: number; y: number };
-    speed: number;
-    offset: number;
-    damage: number;
+    projectiles: {
+      speed: number;
+      offset: number;
+      damage: number;
+      reloading: number;
+    };
   }) {
     // rendering
     this.context = props.context;
@@ -37,20 +43,17 @@ export default class Turret {
     this.radius = props.radius;
     this.angle = 0;
     // shooting
-    this.speed = props.speed;
-    this.offset = props.offset;
-    this.damage = props.damage;
+    this.projectiles = props.projectiles;
+    this.projectile = undefined;
     this.reloading = 0;
   }
 
   public update(intruders: Intruder[]) {
     // get first valid target
-    this.target = intruders
-      .filter((intruder) => {
-        if (intruder.position.x < 0 || intruder.position.y < 0) return false;
-        return this.distanceTo(intruder) <= intruder.width / 2 + this.radius;
-      })
-      .pop();
+    this.target = intruders.filter((intruder) => {
+      if (intruder.position.x < 0 || intruder.position.y < 0) return false;
+      return this.distanceTo(intruder) <= intruder.width / 2 + this.radius;
+    })[0];
 
     if (this.target) {
       // orientate towards target
@@ -66,9 +69,8 @@ export default class Turret {
           this.projectile = new Projectile({
             position: { ...this.position },
             target: this.target,
-            speed: this.speed,
-            offset: this.offset,
             maxDistance: this.radius,
+            ...this.projectiles,
           });
         }
       }
@@ -77,12 +79,12 @@ export default class Turret {
     // update projectile
     if (this.projectile) {
       if (this.projectile.hasHitTarget()) {
-        this.projectile.target.health -= this.damage;
+        this.projectile.target.health -= this.projectiles.damage;
         this.projectile = undefined;
-        this.reloading = -this.speed;
+        this.reloading = -this.projectiles.reloading;
       } else if (this.projectile.hasMissedTarget()) {
         this.projectile = undefined;
-        this.reloading = -this.speed;
+        this.reloading = -this.projectiles.reloading;
       } else {
         this.projectile.update();
       }

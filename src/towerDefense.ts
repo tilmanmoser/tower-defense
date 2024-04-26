@@ -12,6 +12,7 @@ export default class TowerDefense {
   coins: number = 100;
   buildTurretIndex: number = 0;
   pointerPos: { x: number; y: number } | undefined;
+  waveIndex: number = -1;
 
   public constructor(props: {
     context: CanvasRenderingContext2D;
@@ -44,7 +45,11 @@ export default class TowerDefense {
   }
 
   public isFinished() {
-    return this.lives <= 0;
+    return (
+      this.lives <= 0 ||
+      (this.waveIndex === this.level.waves.length - 1 &&
+        this.intruders.length === 0)
+    );
   }
 
   private drawMap() {
@@ -80,16 +85,28 @@ export default class TowerDefense {
     }
 
     // create new wave
-    if (this.intruders.length === 0) {
-      this.intruders.push(
-        new Intruder({
-          context: this.context,
-          ...this.level.intruders[0],
-          waypoints: this.level.waypoints[
-            this.level.intruders[0].waypointsIndex
-          ].map((p) => p),
-        })
-      );
+    if (
+      this.intruders.length === 0 &&
+      this.waveIndex < this.level.waves.length - 1
+    ) {
+      const wave = this.level.waves[++this.waveIndex];
+      wave.forEach((intruderIndex, count) => {
+        const intruderProps = { ...this.level.intruders[intruderIndex] };
+        const waypoints = this.level.waypoints[
+          intruderProps.waypointsIndex
+        ].map((p) => ({
+          x: p.x < 0 ? p.x - this.level.tiles.width * count : p.x,
+          y: p.y < 0 ? p.y - this.level.tiles.height * count : p.y,
+        }));
+        this.intruders.push(
+          new Intruder({
+            context: this.context,
+            ...intruderProps,
+            waypoints: waypoints,
+          })
+        );
+      });
+      console.log(this.intruders);
     }
   }
 
@@ -112,6 +129,7 @@ export default class TowerDefense {
 
   private onPointerDown(ev: PointerEvent) {
     if (
+      ev.button === 0 &&
       this.pointerPos &&
       this.canPlaceTurretAt(this.pointerPos) &&
       this.coins - this.level.turrets[this.buildTurretIndex].cost >= 0

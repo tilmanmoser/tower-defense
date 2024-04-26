@@ -20,6 +20,7 @@ export type LevelData = {
       revenue: number;
     }
   ];
+  waves: number[][];
   turrets: [
     {
       image: string;
@@ -27,9 +28,12 @@ export type LevelData = {
       width: number;
       height: number;
       radius: number;
-      speed: number;
-      offset: number;
-      damage: number;
+      projectiles: {
+        speed: number;
+        offset: number;
+        damage: number;
+        reloading: number;
+      };
     }
   ];
 };
@@ -114,9 +118,10 @@ export const levels: LevelData[] = [
         speed: 2,
         waypointsIndex: 0,
         health: 100,
-        revenue: 50,
+        revenue: 25,
       },
     ],
+    waves: [[0], [0, 0], [0, 0, 0, 0]],
     turrets: [
       {
         image: "/turret0.png",
@@ -124,9 +129,12 @@ export const levels: LevelData[] = [
         width: 128,
         height: 128,
         radius: 3 * 128,
-        speed: 4,
-        offset: 46,
-        damage: 5,
+        projectiles: {
+          speed: 4,
+          offset: 46,
+          damage: 5,
+          reloading: 4,
+        },
       },
     ],
   },
