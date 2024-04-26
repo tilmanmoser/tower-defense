@@ -18,6 +18,15 @@ export type LevelData = {
       waypointsIndex: number;
     }
   ];
+  turrets: [
+    {
+      image: string;
+      cost: number;
+      width: number;
+      height: number;
+      radius: number;
+    }
+  ];
 };
 
 export const levels: LevelData[] = [
@@ -93,12 +102,21 @@ export const levels: LevelData[] = [
     ],
     intruders: [
       {
-        image: "/soldier.png",
+        image: "/intruder0.png",
         width: 128,
         height: 128,
         frames: 4,
         speed: 2,
         waypointsIndex: 0,
+      },
+    ],
+    turrets: [
+      {
+        image: "/turret0.png",
+        cost: 25,
+        width: 128,
+        height: 128,
+        radius: 3 * 128,
       },
     ],
   },

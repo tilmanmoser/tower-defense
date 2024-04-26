@@ -1,15 +1,17 @@
 import { LevelData } from "./levels";
 import Intruder from "./units/intruder";
+import Turret from "./units/turret";
 
 export default class TowerDefense {
   context: CanvasRenderingContext2D;
   level: LevelData;
   map: HTMLImageElement;
-  intruders: Intruder[];
-  lives: number;
-  coins: number;
-  currentTilePointer: { x: number; y: number } | undefined;
-  isCurrentTileRestricted: boolean = true;
+  intruders: Intruder[] = [];
+  turrets: Turret[] = [];
+  lives: number = 10;
+  coins: number = 100;
+  buildTurretIndex: number = 0;
+  pointerPos: { x: number; y: number } | undefined;
 
   public constructor(props: {
     context: CanvasRenderingContext2D;
@@ -22,13 +24,6 @@ export default class TowerDefense {
     this.map = new Image();
     this.map.src = this.level.map;
 
-    // game objects
-    this.intruders = [];
-
-    // game vars
-    this.lives = 10;
-    this.coins = 100;
-
     // eventlistener
     this.context.canvas.addEventListener("pointermove", (ev) =>
       this.onPointerMove(ev)
@@ -36,12 +31,16 @@ export default class TowerDefense {
     this.context.canvas.addEventListener("pointerout", (ev) =>
       this.onPointerOut(ev)
     );
+    this.context.canvas.addEventListener("pointerdown", (ev) =>
+      this.onPointerDown(ev)
+    );
   }
 
   public update() {
     this.drawMap();
+    this.updateTurrets();
     this.updateIntruders();
-    this.drawSelectedTile();
+    this.drawPointer();
   }
 
   public isFinished() {
@@ -58,8 +57,14 @@ export default class TowerDefense {
     );
   }
 
+  private updateTurrets() {
+    for (let i = this.turrets.length - 1; i >= 0; i--) {
+      const turret = this.turrets[i];
+      turret.update(this.intruders);
+    }
+  }
+
   private updateIntruders() {
-    // update each intruder
     for (let i = this.intruders.length - 1; i >= 0; i--) {
       const intruder = this.intruders[i];
       intruder.update();
@@ -83,47 +88,88 @@ export default class TowerDefense {
     }
   }
 
-  private drawSelectedTile() {
-    if (this.currentTilePointer) {
-      this.context.fillStyle = this.isCurrentTileRestricted
-        ? `rgba(255,0,0,.5)`
-        : `rgba(255,255,255,.5)`;
+  private onPointerMove(ev: PointerEvent) {
+    // calculate tile pointed at
+    const canvas = this.context.canvas;
+    const boundingRect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / boundingRect.width;
+    const scaleY = canvas.height / boundingRect.height;
+    const relativeX = (ev.clientX - boundingRect.left) * scaleX;
+    const relativeY = (ev.clientY - boundingRect.top) * scaleY;
+    const centerX =
+      (Math.floor(relativeX / this.level.tiles.width) + 0.5) *
+      this.level.tiles.width;
+    const centerY =
+      (Math.floor(relativeY / this.level.tiles.height) + 0.5) *
+      this.level.tiles.height;
+    this.pointerPos = { x: centerX, y: centerY };
+  }
+
+  private onPointerDown(ev: PointerEvent) {
+    if (
+      this.pointerPos &&
+      this.canPlaceTurretAt(this.pointerPos) &&
+      this.coins - this.level.turrets[this.buildTurretIndex].cost >= 0
+    ) {
+      this.coins -= this.level.turrets[this.buildTurretIndex].cost;
+      this.turrets.push(
+        new Turret({
+          context: this.context,
+          ...this.level.turrets[this.buildTurretIndex],
+          position: this.pointerPos,
+        })
+      );
+    }
+  }
+
+  private onPointerOut(ev: PointerEvent) {
+    this.pointerPos = undefined;
+  }
+
+  private drawPointer() {
+    if (this.pointerPos) {
+      this.context.fillStyle = this.canPlaceTurretAt(this.pointerPos)
+        ? `rgba(0,128,255,0.25)`
+        : `rgba(255,0,0,0.25)`;
+      this.context.beginPath();
+      this.context.arc(
+        this.pointerPos.x,
+        this.pointerPos.y,
+        this.level.turrets[this.buildTurretIndex].radius,
+        0,
+        2 * Math.PI
+      );
+      this.context.fill();
       this.context.fillRect(
-        this.currentTilePointer.x * this.level.tiles.width,
-        this.currentTilePointer.y * this.level.tiles.height,
+        this.pointerPos.x - this.level.tiles.width / 2,
+        this.pointerPos.y - this.level.tiles.height / 2,
         this.level.tiles.width,
         this.level.tiles.height
       );
     }
   }
 
-  private onPointerMove(ev: PointerEvent) {
-    // calculate selected tile
-    const canvas = this.context.canvas;
-    const boundingRect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / boundingRect.width;
-    const scaleY = canvas.height / boundingRect.height;
-    this.currentTilePointer = {
-      x: Math.floor(
-        ((ev.clientX - boundingRect.left) * scaleX) / this.level.tiles.width
-      ),
-      y: Math.floor(
-        ((ev.clientY - boundingRect.top) * scaleY) / this.level.tiles.height
-      ),
-    };
-
-    this.isCurrentTileRestricted = false;
+  private canPlaceTurretAt(pos: { x: number; y: number }) {
+    const tileIndex =
+      Math.floor(pos.y / this.level.tiles.height) * this.level.tiles.cols +
+      Math.floor(pos.x / this.level.tiles.width);
+    let placable = true;
     this.level.restrictedTiles.forEach((tiles) => {
-      const currentTileIndex =
-        (this.currentTilePointer?.y || 0) * this.level.tiles.cols +
-        (this.currentTilePointer?.x || 0);
-      if (tiles[currentTileIndex] != 0) {
-        this.isCurrentTileRestricted = true;
+      if (
+        tileIndex > -1 &&
+        tileIndex < tiles.length &&
+        tiles[tileIndex] !== 0
+      ) {
+        placable = false;
+        return;
       }
     });
-  }
-
-  private onPointerOut(ev: PointerEvent) {
-    this.currentTilePointer = undefined;
+    this.turrets.forEach((turret) => {
+      if (turret.position.x === pos.x && turret.position.y === pos.y) {
+        placable = false;
+        return;
+      }
+    });
+    return placable;
   }
 }

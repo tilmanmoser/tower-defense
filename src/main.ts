@@ -40,7 +40,7 @@ import "./style.css";
   app.appendChild(stats);
 
   const updateGameStats = () => {
-    stats.innerHTML = `<span style="color: red">&#9829;</span> ${towerDefense.lives}`;
+    stats.innerHTML = `<span style="color: red">&#9829;</span> ${towerDefense.lives} &nbsp; <span style="color: gold">&#x1F4B0;</span> ${towerDefense.coins}`;
   };
 
   // display end screen
