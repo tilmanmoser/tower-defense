@@ -61,6 +61,31 @@ import "./style.css";
     overlay.style.display = "flex";
   };
 
+  // display turret selection
+  const sidebar = document.createElement("div");
+  sidebar.classList.add("game-sidebar");
+  app.appendChild(sidebar);
+
+  for (let i = 0; i < level.turrets.length; i++) {
+    const turret = level.turrets[i];
+
+    const entry = document.createElement("div");
+    entry.classList.add("entry");
+    const icon = new Image();
+    icon.src = turret.icon;
+    entry.appendChild(icon);
+
+    const description = document.createElement("div");
+    description.classList.add("description");
+    description.innerHTML = `&#x1F4B0; ${turret.cost} &#x1F525; ${turret.projectiles.damage}`;
+    entry.appendChild(description);
+
+    entry.onclick = () => {
+      towerDefense.turretToPlaceIndex = i;
+    };
+    sidebar.appendChild(entry);
+  }
+
   // run game
   (function animate() {
     const handle = requestAnimationFrame(animate);

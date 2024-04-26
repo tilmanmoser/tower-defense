@@ -116,6 +116,16 @@ export default class Turret {
 
     // draw projectile
     if (this.projectile) {
+      this.context.save();
+      this.context.setTransform(
+        1,
+        0,
+        0,
+        1,
+        this.projectile.position.x,
+        this.projectile.position.y
+      );
+      this.context.rotate(this.projectile.angle);
       this.context.drawImage(
         this.image,
         // crop image
@@ -124,11 +134,12 @@ export default class Turret {
         this.width,
         this.height,
         // relative centered position
-        this.projectile.position.x - this.width / 2,
-        this.projectile.position.y - this.height / 2,
+        -this.width / 2,
+        -this.height / 2,
         this.width,
         this.height
       );
+      this.context.restore();
     }
 
     // draw gun

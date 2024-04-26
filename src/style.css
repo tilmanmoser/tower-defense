@@ -42,3 +42,21 @@ body {
   color: white;
   -webkit-text-stroke: 3px black;
 }
+
+#app .game-sidebar {
+  width: 256px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.entry {
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.entry img {
+  width: 50%;
+  transform: scale(0.5);
+}

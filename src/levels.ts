@@ -8,34 +8,32 @@ export type LevelData = {
   };
   restrictedTiles: number[][];
   waypoints: [{ x: number; y: number }[]];
-  intruders: [
-    {
-      image: string;
-      width: number;
-      height: number;
-      frames: number;
-      speed: number;
-      waypointsIndex: number;
-      health: number;
-      revenue: number;
-    }
-  ];
+  intruders: {
+    image: string;
+    width: number;
+    height: number;
+    frames: number;
+    duration: number;
+    speed: number;
+    waypointsIndex: number;
+    health: number;
+    revenue: number;
+  }[];
   waves: number[][];
-  turrets: [
-    {
-      image: string;
-      cost: number;
-      width: number;
-      height: number;
-      radius: number;
-      projectiles: {
-        speed: number;
-        offset: number;
-        damage: number;
-        reloading: number;
-      };
-    }
-  ];
+  turrets: {
+    image: string;
+    icon: string;
+    cost: number;
+    width: number;
+    height: number;
+    radius: number;
+    projectiles: {
+      speed: number;
+      offset: number;
+      damage: number;
+      reloading: number;
+    };
+  }[];
 };
 
 export const levels: LevelData[] = [
@@ -111,20 +109,44 @@ export const levels: LevelData[] = [
     ],
     intruders: [
       {
-        image: "/intruder0.png",
+        image: "/soldier0.png",
         width: 128,
         height: 128,
         frames: 4,
+        duration: 6,
         speed: 2,
         waypointsIndex: 0,
         health: 100,
         revenue: 25,
       },
+      {
+        image: "/tank0.png",
+        width: 128,
+        height: 128,
+        frames: 8,
+        duration: 24,
+        speed: 1,
+        waypointsIndex: 0,
+        health: 300,
+        revenue: 50,
+      },
+      {
+        image: "/soldier1.png",
+        width: 128,
+        height: 128,
+        frames: 4,
+        duration: 8,
+        speed: 4,
+        waypointsIndex: 0,
+        health: 150,
+        revenue: 50,
+      },
     ],
-    waves: [[0], [0, 0], [0, 0, 0, 0]],
+    waves: [[0], [0, 0, 1], [2, 2]],
     turrets: [
       {
         image: "/turret0.png",
+        icon: "/turret0-icon.png",
         cost: 25,
         width: 128,
         height: 128,
@@ -134,6 +156,20 @@ export const levels: LevelData[] = [
           offset: 46,
           damage: 5,
           reloading: 4,
+        },
+      },
+      {
+        image: "/turret1.png",
+        icon: "/turret1-icon.png",
+        cost: 100,
+        width: 128,
+        height: 128,
+        radius: 5 * 128,
+        projectiles: {
+          speed: 12,
+          offset: 30,
+          damage: 15,
+          reloading: 16,
         },
       },
     ],

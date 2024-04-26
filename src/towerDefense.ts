@@ -10,7 +10,7 @@ export default class TowerDefense {
   turrets: Turret[] = [];
   lives: number = 10;
   coins: number = 100;
-  buildTurretIndex: number = 0;
+  turretToPlaceIndex: number = 1;
   pointerPos: { x: number; y: number } | undefined;
   waveIndex: number = -1;
 
@@ -132,13 +132,13 @@ export default class TowerDefense {
       ev.button === 0 &&
       this.pointerPos &&
       this.canPlaceTurretAt(this.pointerPos) &&
-      this.coins - this.level.turrets[this.buildTurretIndex].cost >= 0
+      this.coins - this.level.turrets[this.turretToPlaceIndex].cost >= 0
     ) {
-      this.coins -= this.level.turrets[this.buildTurretIndex].cost;
+      this.coins -= this.level.turrets[this.turretToPlaceIndex].cost;
       this.turrets.push(
         new Turret({
           context: this.context,
-          ...this.level.turrets[this.buildTurretIndex],
+          ...this.level.turrets[this.turretToPlaceIndex],
           position: this.pointerPos,
         })
       );
@@ -152,13 +152,15 @@ export default class TowerDefense {
   private drawPointer() {
     if (this.pointerPos) {
       this.context.fillStyle = this.canPlaceTurretAt(this.pointerPos)
-        ? `rgba(0,128,255,0.25)`
+        ? this.coins >= this.level.turrets[this.turretToPlaceIndex].cost
+          ? `rgba(0,128,255,0.25)`
+          : `rgba(0,0,0,0.10)`
         : `rgba(255,0,0,0.25)`;
       this.context.beginPath();
       this.context.arc(
         this.pointerPos.x,
         this.pointerPos.y,
-        this.level.turrets[this.buildTurretIndex].radius,
+        this.level.turrets[this.turretToPlaceIndex].radius,
         0,
         2 * Math.PI
       );

@@ -6,6 +6,7 @@ export default class Projectile {
   target: Intruder;
   speed: number;
   maxDistance: number;
+  angle: number;
 
   constructor(props: {
     position: { x: number; y: number };
@@ -21,17 +22,18 @@ export default class Projectile {
     this.speed = props.offset;
     this.update();
     this.speed = props.speed;
+    this.angle = 0;
   }
 
   public update() {
-    const angle = Math.atan2(
+    this.angle = Math.atan2(
       this.target.position.y - this.position.y,
       this.target.position.x - this.position.x
     );
 
     const velocity = {
-      x: Math.cos(angle) * this.speed,
-      y: Math.sin(angle) * this.speed,
+      x: Math.cos(this.angle) * this.speed,
+      y: Math.sin(this.angle) * this.speed,
     };
 
     this.position.x += velocity.x;

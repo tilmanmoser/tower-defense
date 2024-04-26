@@ -15,6 +15,7 @@ export default class Intruder {
   health: number;
   maxHealth: number;
   revenue: number;
+  framesDuration: number;
 
   public constructor(props: {
     context: CanvasRenderingContext2D;
@@ -22,6 +23,7 @@ export default class Intruder {
     width: number;
     height: number;
     frames: number;
+    duration: number;
     speed: number;
     waypoints: { x: number; y: number }[];
     health: number;
@@ -35,6 +37,7 @@ export default class Intruder {
     this.height = props.height;
     this.framesCount = props.frames;
     this.framesIndex = 0;
+    this.framesDuration = props.duration;
     this.framesElapsed = 0;
     this.maxHealth = props.health;
     this.health = props.health;
@@ -73,7 +76,7 @@ export default class Intruder {
 
   private draw() {
     // update frame
-    if (++this.framesElapsed % Math.ceil(30 / this.framesCount) === 0) {
+    if (++this.framesElapsed % this.framesDuration === 0) {
       this.framesElapsed = 0;
       this.framesIndex = (this.framesIndex + 1) % this.framesCount;
     }
