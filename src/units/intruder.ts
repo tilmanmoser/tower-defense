@@ -12,6 +12,9 @@ export default class Intruder {
   waypointsIndex: number;
   position: { x: number; y: number };
   hasReachedLastWaypoint: boolean;
+  health: number;
+  maxHealth: number;
+  revenue: number;
 
   public constructor(props: {
     context: CanvasRenderingContext2D;
@@ -21,6 +24,8 @@ export default class Intruder {
     frames: number;
     speed: number;
     waypoints: { x: number; y: number }[];
+    health: number;
+    revenue: number;
   }) {
     // render attributes
     this.context = props.context;
@@ -31,6 +36,9 @@ export default class Intruder {
     this.framesCount = props.frames;
     this.framesIndex = 0;
     this.framesElapsed = 0;
+    this.maxHealth = props.health;
+    this.health = props.health;
+    this.revenue = props.revenue;
 
     // movement attributes
     this.waypoints = props.waypoints;
@@ -87,5 +95,21 @@ export default class Intruder {
       this.height
     );
     this.context.restore();
+
+    this.context.fillStyle = "red";
+    this.context.fillRect(
+      this.position.x - this.width / 2,
+      this.position.y - this.width / 2,
+      this.width,
+      5
+    );
+
+    this.context.fillStyle = "green";
+    this.context.fillRect(
+      this.position.x - this.width / 2,
+      this.position.y - this.width / 2,
+      (this.width / this.maxHealth) * Math.max(0, this.health),
+      5
+    );
   }
 }

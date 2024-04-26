@@ -11,6 +11,10 @@ export default class Turret {
   position: { x: number; y: number };
   target: Intruder | undefined;
   projectile: Projectile | undefined;
+  speed: number;
+  offset: number;
+  damage: number;
+  reloading: number;
 
   public constructor(props: {
     context: CanvasRenderingContext2D;
@@ -19,6 +23,9 @@ export default class Turret {
     height: number;
     radius: number;
     position: { x: number; y: number };
+    speed: number;
+    offset: number;
+    damage: number;
   }) {
     // rendering
     this.context = props.context;
@@ -29,14 +36,19 @@ export default class Turret {
     this.height = props.height;
     this.radius = props.radius;
     this.angle = 0;
+    // shooting
+    this.speed = props.speed;
+    this.offset = props.offset;
+    this.damage = props.damage;
+    this.reloading = 0;
   }
 
   public update(intruders: Intruder[]) {
     // get first valid target
     this.target = intruders
       .filter((intruder) => {
-        const dist = this.distanceTo(intruder);
-        return dist <= intruder.width / 2 + this.radius;
+        if (intruder.position.x < 0 || intruder.position.y < 0) return false;
+        return this.distanceTo(intruder) <= intruder.width / 2 + this.radius;
       })
       .pop();
 
@@ -48,23 +60,29 @@ export default class Turret {
 
       // shoot at target
       if (!this.projectile) {
-        this.projectile = new Projectile({
-          position: { ...this.position },
-          target: this.target,
-          speed: 4,
-          offset: 46,
-          maxDistance: this.radius,
-        });
+        if (this.reloading < 0) {
+          this.reloading++;
+        } else {
+          this.projectile = new Projectile({
+            position: { ...this.position },
+            target: this.target,
+            speed: this.speed,
+            offset: this.offset,
+            maxDistance: this.radius,
+          });
+        }
       }
     }
 
     // update projectile
     if (this.projectile) {
       if (this.projectile.hasHitTarget()) {
-        // hit
+        this.projectile.target.health -= this.damage;
         this.projectile = undefined;
+        this.reloading = -this.speed;
       } else if (this.projectile.hasMissedTarget()) {
         this.projectile = undefined;
+        this.reloading = -this.speed;
       } else {
         this.projectile.update();
       }

@@ -67,10 +67,15 @@ export default class TowerDefense {
   private updateIntruders() {
     for (let i = this.intruders.length - 1; i >= 0; i--) {
       const intruder = this.intruders[i];
-      intruder.update();
-      if (intruder.hasReachedLastWaypoint) {
+      if (intruder.health <= 0) {
+        this.coins += intruder.revenue;
         this.intruders.splice(i, 1);
-        this.lives--;
+      } else {
+        intruder.update();
+        if (intruder.hasReachedLastWaypoint) {
+          this.intruders.splice(i, 1);
+          this.lives--;
+        }
       }
     }
 

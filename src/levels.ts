@@ -16,6 +16,8 @@ export type LevelData = {
       frames: number;
       speed: number;
       waypointsIndex: number;
+      health: number;
+      revenue: number;
     }
   ];
   turrets: [
@@ -25,6 +27,9 @@ export type LevelData = {
       width: number;
       height: number;
       radius: number;
+      speed: number;
+      offset: number;
+      damage: number;
     }
   ];
 };
@@ -108,6 +113,8 @@ export const levels: LevelData[] = [
         frames: 4,
         speed: 2,
         waypointsIndex: 0,
+        health: 100,
+        revenue: 50,
       },
     ],
     turrets: [
@@ -117,6 +124,9 @@ export const levels: LevelData[] = [
         width: 128,
         height: 128,
         radius: 3 * 128,
+        speed: 4,
+        offset: 46,
+        damage: 5,
       },
     ],
   },
