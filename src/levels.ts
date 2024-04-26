@@ -7,7 +7,7 @@ export type LevelData = {
     height: number;
   };
   restrictedTiles: number[][];
-  waypoints: [{ x: number; y: number }[]];
+  waypoints: { x: number; y: number }[][];
   intruders: {
     image: string;
     width: number;
@@ -18,6 +18,8 @@ export type LevelData = {
     waypointsIndex: number;
     health: number;
     revenue: number;
+    shadow?: number;
+    air?: boolean;
   }[];
   waves: number[][];
   turrets: {
@@ -32,6 +34,7 @@ export type LevelData = {
       offset: number;
       damage: number;
       reloading: number;
+      air?: boolean;
     };
   }[];
 };
@@ -106,6 +109,10 @@ export const levels: LevelData[] = [
         { x: 384, y: 1536 },
         { x: 384, y: 2816 },
       ],
+      [
+        { x: 0, y: -256 },
+        { x: 0, y: 2816 },
+      ],
     ],
     intruders: [
       {
@@ -141,8 +148,21 @@ export const levels: LevelData[] = [
         health: 150,
         revenue: 50,
       },
+      {
+        image: "/plane0.png",
+        width: 128,
+        height: 128,
+        frames: 1,
+        duration: 0,
+        speed: 1,
+        waypointsIndex: 1,
+        health: 200,
+        revenue: 100,
+        shadow: 1,
+        air: true,
+      },
     ],
-    waves: [[0], [0, 0, 1], [2, 2]],
+    waves: [[3, 3, 3], [0], [0, 0, 1], [2, 2]],
     turrets: [
       {
         image: "/turret0.png",
@@ -170,6 +190,7 @@ export const levels: LevelData[] = [
           offset: 30,
           damage: 15,
           reloading: 16,
+          air: true,
         },
       },
     ],

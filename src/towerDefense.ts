@@ -10,7 +10,7 @@ export default class TowerDefense {
   turrets: Turret[] = [];
   lives: number = 10;
   coins: number = 100;
-  turretToPlaceIndex: number = 1;
+  turretToPlaceIndex: number = 0;
   pointerPos: { x: number; y: number } | undefined;
   waveIndex: number = -1;
 
@@ -92,12 +92,26 @@ export default class TowerDefense {
       const wave = this.level.waves[++this.waveIndex];
       wave.forEach((intruderIndex, count) => {
         const intruderProps = { ...this.level.intruders[intruderIndex] };
-        const waypoints = this.level.waypoints[
-          intruderProps.waypointsIndex
-        ].map((p) => ({
-          x: p.x < 0 ? p.x - this.level.tiles.width * count : p.x,
-          y: p.y < 0 ? p.y - this.level.tiles.height * count : p.y,
-        }));
+
+        let waypoints = this.level.waypoints[intruderProps.waypointsIndex].map(
+          (p) => ({
+            x: p.x < 0 ? p.x - this.level.tiles.width * count : p.x,
+            y: p.y < 0 ? p.y - this.level.tiles.height * count : p.y,
+          })
+        );
+
+        if (intruderProps.air) {
+          const randX =
+            (Math.floor(Math.random() * this.level.tiles.cols) + 0.5) *
+            this.level.tiles.width;
+          const randY =
+            (Math.floor(Math.random() * this.level.tiles.rows) + 0.5) *
+            this.level.tiles.height;
+          waypoints = waypoints.map((p) => ({
+            x: p.x === 0 ? randX : p.x,
+            y: p.y === 0 ? randY : p.y,
+          }));
+        }
         this.intruders.push(
           new Intruder({
             context: this.context,

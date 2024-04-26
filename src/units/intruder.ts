@@ -16,6 +16,8 @@ export default class Intruder {
   maxHealth: number;
   revenue: number;
   framesDuration: number;
+  shadow?: number;
+  air: boolean | undefined;
 
   public constructor(props: {
     context: CanvasRenderingContext2D;
@@ -28,6 +30,8 @@ export default class Intruder {
     waypoints: { x: number; y: number }[];
     health: number;
     revenue: number;
+    air?: boolean;
+    shadow?: number;
   }) {
     // render attributes
     this.context = props.context;
@@ -42,6 +46,7 @@ export default class Intruder {
     this.maxHealth = props.health;
     this.health = props.health;
     this.revenue = props.revenue;
+    this.shadow = props.shadow;
 
     // movement attributes
     this.waypoints = props.waypoints;
@@ -50,6 +55,7 @@ export default class Intruder {
     this.hasReachedLastWaypoint = false;
     this.speed = props.speed;
     this.angle = 0;
+    this.air = props.air;
   }
 
   public update() {
@@ -97,6 +103,21 @@ export default class Intruder {
       this.width,
       this.height
     );
+    if (this.shadow) {
+      this.context.drawImage(
+        this.image,
+        // crop image
+        this.shadow * this.width,
+        0,
+        this.width,
+        this.height,
+        // relative centered position
+        this.width * 0.25,
+        this.height * 0.25,
+        this.width,
+        this.height
+      );
+    }
     this.context.restore();
 
     this.context.fillStyle = "red";

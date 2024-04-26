@@ -77,7 +77,9 @@ import "./style.css";
 
     const description = document.createElement("div");
     description.classList.add("description");
-    description.innerHTML = `&#x1F4B0; ${turret.cost} &#x1F525; ${turret.projectiles.damage}`;
+    description.innerHTML = `&#x1F4B0; ${turret.cost} &#x1F525; ${
+      turret.projectiles.damage
+    } ${turret.projectiles.air ? "&#9992" : ""}`;
     entry.appendChild(description);
 
     entry.onclick = () => {
