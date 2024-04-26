@@ -1,14 +1,15 @@
 import { levels } from "./levels";
-import "./style.css";
 import TowerDefense from "./towerDefense";
+import "@fontsource/vt323";
+import "./style.css";
 
 (function () {
+  // set level data
+  const level = levels[0];
+
   // bind app div
   const app = document.querySelector<HTMLDivElement>("#app");
   if (!app) return;
-
-  // load level data
-  const level = levels[0];
 
   // create canvas
   const canvas = document.createElement("canvas");
@@ -27,14 +28,41 @@ import TowerDefense from "./towerDefense";
   const context = canvas.getContext("2d");
   if (!context) return;
 
-  // initialize and run game
+  // initialize game
   const towerDefense = new TowerDefense({
     context: context,
     level: level,
   });
+
+  // display game stats
+  const stats = document.createElement("div");
+  stats.classList.add("game-stats");
+  app.appendChild(stats);
+
+  const updateGameStats = () => {
+    stats.innerHTML = `<span style="color: red">&#9829;</span> ${towerDefense.lives}`;
+  };
+
+  // display end screen
+  const overlay = document.createElement("div");
+  overlay.classList.add("game-overlay");
+  overlay.innerHTML = "Game Over";
+  app.appendChild(overlay);
+
+  const showOverlay = () => {
+    overlay.innerHTML =
+      towerDefense.lives > 0 ? "Congratulations!" : "Game Over!";
+    overlay.style.display = "flex";
+  };
+
+  // run game
   (function animate() {
     const handle = requestAnimationFrame(animate);
     towerDefense.update();
-    if (towerDefense.isFinished()) cancelAnimationFrame(handle);
+    updateGameStats();
+    if (towerDefense.isFinished()) {
+      cancelAnimationFrame(handle);
+      showOverlay();
+    }
   })();
 })();

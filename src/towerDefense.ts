@@ -6,6 +6,8 @@ export default class TowerDefense {
   level: LevelData;
   map: HTMLImageElement;
   intruders: Intruder[];
+  lives: number;
+  coins: number;
 
   public constructor(props: {
     context: CanvasRenderingContext2D;
@@ -20,6 +22,10 @@ export default class TowerDefense {
 
     // game objects
     this.intruders = [];
+
+    // game vars
+    this.lives = 10;
+    this.coins = 100;
   }
 
   public update() {
@@ -28,7 +34,7 @@ export default class TowerDefense {
   }
 
   public isFinished() {
-    return false;
+    return this.lives <= 0;
   }
 
   private drawMap() {
@@ -48,6 +54,7 @@ export default class TowerDefense {
       intruder.update();
       if (intruder.hasReachedLastWaypoint) {
         this.intruders.splice(i, 1);
+        this.lives--;
       }
     }
 
