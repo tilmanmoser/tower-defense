@@ -32,22 +32,52 @@ export default class Turret {
   }
 
   public update(intruders: Intruder[]) {
+    // get first valid target
     this.target = intruders
       .filter((intruder) => {
-        const deltaX = intruder.position.x - this.position.x;
-        const deltaY = intruder.position.y - this.position.y;
-        const dist = Math.hypot(deltaX, deltaY);
+        const dist = this.distanceTo(intruder);
         return dist <= intruder.width / 2 + this.radius;
       })
       .pop();
 
     if (this.target) {
+      // orientate towards target
       const deltaX = this.target.position.x - this.position.x;
       const deltaY = this.target.position.y - this.position.y;
       this.angle = Math.atan2(deltaY, deltaX);
+
+      // shoot at target
+      if (!this.projectile) {
+        this.projectile = new Projectile({
+          position: { ...this.position },
+          target: this.target,
+          speed: 4,
+          offset: 46,
+          maxDistance: this.radius,
+        });
+      }
+    }
+
+    // update projectile
+    if (this.projectile) {
+      if (this.projectile.hasHitTarget()) {
+        // hit
+        this.projectile = undefined;
+      } else if (this.projectile.hasMissedTarget()) {
+        this.projectile = undefined;
+      } else {
+        this.projectile.update();
+      }
     }
 
     this.draw();
+  }
+
+  private distanceTo(intruder: Intruder) {
+    const deltaX = intruder.position.x - this.position.x;
+    const deltaY = intruder.position.y - this.position.y;
+    const dist = Math.hypot(deltaX, deltaY);
+    return dist;
   }
 
   private draw() {
@@ -63,6 +93,23 @@ export default class Turret {
       this.width,
       this.height
     );
+
+    // draw projectile
+    if (this.projectile) {
+      this.context.drawImage(
+        this.image,
+        // crop image
+        this.width * 2,
+        0,
+        this.width,
+        this.height,
+        // relative centered position
+        this.projectile.position.x - this.width / 2,
+        this.projectile.position.y - this.height / 2,
+        this.width,
+        this.height
+      );
+    }
 
     // draw gun
     this.context.save();

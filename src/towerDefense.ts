@@ -38,8 +38,8 @@ export default class TowerDefense {
 
   public update() {
     this.drawMap();
-    this.updateTurrets();
     this.updateIntruders();
+    this.updateTurrets();
     this.drawPointer();
   }
 
