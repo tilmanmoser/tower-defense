@@ -74,9 +74,9 @@ export default class TowerDefense {
         new Intruder({
           context: this.context,
           ...this.level.intruders[0],
-          path: this.level.paths[this.level.intruders[0].pathIndex].map(
-            (p) => p
-          ),
+          waypoints: this.level.waypoints[
+            this.level.intruders[0].waypointsIndex
+          ].map((p) => p),
         })
       );
     }

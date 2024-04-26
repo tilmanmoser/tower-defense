@@ -6,7 +6,8 @@ export type LevelData = {
     width: number;
     height: number;
   };
-  paths: [{ x: number; y: number }[]];
+
+  waypoints: [{ x: number; y: number }[]];
   intruders: [
     {
       image: string;
@@ -14,7 +15,7 @@ export type LevelData = {
       height: number;
       frames: number;
       speed: number;
-      pathIndex: number;
+      waypointsIndex: number;
     }
   ];
 };
@@ -28,7 +29,7 @@ export const levels: LevelData[] = [
       width: 128,
       height: 128,
     },
-    paths: [
+    waypoints: [
       [
         { x: 384, y: -256 },
         { x: 384, y: 384 },
@@ -51,7 +52,7 @@ export const levels: LevelData[] = [
         height: 128,
         frames: 4,
         speed: 2,
-        pathIndex: 0,
+        waypointsIndex: 0,
       },
     ],
   },

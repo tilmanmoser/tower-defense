@@ -8,8 +8,8 @@ export default class Intruder {
   framesElapsed: number;
   speed: number;
   angle: number;
-  path: { x: number; y: number }[];
-  pathIndex: number;
+  waypoints: { x: number; y: number }[];
+  waypointsIndex: number;
   position: { x: number; y: number };
   hasReachedLastWaypoint: boolean;
 
@@ -20,7 +20,7 @@ export default class Intruder {
     height: number;
     frames: number;
     speed: number;
-    path: { x: number; y: number }[];
+    waypoints: { x: number; y: number }[];
   }) {
     // render attributes
     this.context = props.context;
@@ -33,16 +33,16 @@ export default class Intruder {
     this.framesElapsed = 0;
 
     // movement attributes
-    this.path = props.path;
-    this.position = { ...this.path[0] };
-    this.pathIndex = 0;
+    this.waypoints = props.waypoints;
+    this.waypointsIndex = 0;
+    this.position = { ...this.waypoints[0] };
     this.hasReachedLastWaypoint = false;
     this.speed = props.speed;
     this.angle = 0;
   }
 
   public update() {
-    const target = this.path[this.pathIndex];
+    const target = this.waypoints[this.waypointsIndex];
     // orientate and move towards target
     const deltaX = target.x - this.position.x;
     const deltaY = target.y - this.position.y;
@@ -55,7 +55,8 @@ export default class Intruder {
       Math.abs(target.x - this.position.x) <= this.speed &&
       Math.abs(target.y - this.position.y) <= this.speed
     ) {
-      if (this.pathIndex < this.path.length - 1) this.pathIndex++;
+      if (this.waypointsIndex < this.waypoints.length - 1)
+        this.waypointsIndex++;
       else this.hasReachedLastWaypoint = true;
     }
 
