@@ -94,7 +94,44 @@ export default class Turret {
         }
       }
     }
+    this.draw();
+  }
 
+  private draw() {
+    // draw base
+    this.context.drawImage(
+      this.image,
+      0,
+      0,
+      this.width,
+      this.height,
+      this.position.x - this.width / 2,
+      this.position.y - this.height / 2,
+      this.width,
+      this.height
+    );
+
+    // draw gun
+    this.context.save();
+    this.context.setTransform(1, 0, 0, 1, this.position.x, this.position.y);
+    this.context.rotate(this.angle);
+    this.context.drawImage(
+      this.image,
+      // crop image
+      this.width,
+      0,
+      this.width,
+      this.height,
+      // relative centered position
+      -this.width / 2,
+      -this.height / 2,
+      this.width,
+      this.height
+    );
+    this.context.restore();
+  }
+
+  public updateProjectile() {
     // update projectile
     if (this.projectile) {
       if (this.projectile.hasHitTarget()) {
@@ -117,31 +154,10 @@ export default class Turret {
         this.projectile.update();
       }
     }
-
-    this.draw();
+    this.drawProjectile();
   }
 
-  private distanceTo(intruder: Intruder) {
-    const deltaX = intruder.getCenter().x - this.position.x;
-    const deltaY = intruder.getCenter().y - this.position.y;
-    const dist = Math.hypot(deltaX, deltaY);
-    return dist;
-  }
-
-  private draw() {
-    // draw base
-    this.context.drawImage(
-      this.image,
-      0,
-      0,
-      this.width,
-      this.height,
-      this.position.x - this.width / 2,
-      this.position.y - this.height / 2,
-      this.width,
-      this.height
-    );
-
+  private drawProjectile() {
     // draw projectile
     if (this.projectile) {
       this.context.save();
@@ -169,24 +185,12 @@ export default class Turret {
       );
       this.context.restore();
     }
+  }
 
-    // draw gun
-    this.context.save();
-    this.context.setTransform(1, 0, 0, 1, this.position.x, this.position.y);
-    this.context.rotate(this.angle);
-    this.context.drawImage(
-      this.image,
-      // crop image
-      this.width,
-      0,
-      this.width,
-      this.height,
-      // relative centered position
-      -this.width / 2,
-      -this.height / 2,
-      this.width,
-      this.height
-    );
-    this.context.restore();
+  private distanceTo(intruder: Intruder) {
+    const deltaX = intruder.getCenter().x - this.position.x;
+    const deltaY = intruder.getCenter().y - this.position.y;
+    const dist = Math.hypot(deltaX, deltaY);
+    return dist;
   }
 }

@@ -41,6 +41,7 @@ export default class TowerDefense {
     this.drawMap();
     this.updateTurrets();
     this.updateIntruders();
+    this.updateProjectiles();
     this.drawPointer();
   }
 
@@ -124,6 +125,13 @@ export default class TowerDefense {
         );
       });
       console.log(this.intruders);
+    }
+  }
+
+  private updateProjectiles() {
+    for (let i = this.turrets.length - 1; i >= 0; i--) {
+      const turret = this.turrets[i];
+      turret.updateProjectile();
     }
   }
 
