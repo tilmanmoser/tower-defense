@@ -220,6 +220,10 @@ export const levels: LevelData[] = [
           air: false,
           slow: 0,
         },
+        audio: {
+          launch: "/turret0-launch.mp3",
+          hit: "/turret0-hit.mp3",
+        },
       },
       {
         image: "/turret1.png",
@@ -235,6 +239,10 @@ export const levels: LevelData[] = [
           reloading: 60,
           air: false,
           slow: 0,
+        },
+        audio: {
+          launch: "/turret1-launch.mp3",
+          hit: "/turret1-hit.mp3",
         },
       },
       {
@@ -252,6 +260,10 @@ export const levels: LevelData[] = [
           air: false,
           slow: -0.5,
         },
+        audio: {
+          launch: "/turret2-launch.mp3",
+          hit: "/turret2-hit.mp3",
+        },
       },
       {
         image: "/turret3.png",
@@ -268,6 +280,10 @@ export const levels: LevelData[] = [
           air: true,
           slow: 0,
         },
+        audio: {
+          launch: "/turret3-launch.mp3",
+          hit: "/turret3-hit.mp3",
+        },
       },
       {
         image: "/turret2.png",
@@ -283,6 +299,10 @@ export const levels: LevelData[] = [
           reloading: 60,
           air: true,
           slow: 0,
+        },
+        audio: {
+          launch: "/turret4-launch.mp3",
+          hit: "/turret4-hit.mp3",
         },
       },
     ],
