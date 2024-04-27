@@ -1,6 +1,6 @@
 import { levels } from "./levels";
 import TowerDefense from "./towerDefense";
-import "@fontsource/vt323";
+import "@fontsource/zen-dots";
 import "./style.css";
 
 (function () {
@@ -15,14 +15,6 @@ import "./style.css";
   const canvas = document.createElement("canvas");
   canvas.width = level.tiles.cols * level.tiles.width;
   canvas.height = level.tiles.rows * level.tiles.height;
-  canvas.style.maxWidth = `min(${
-    canvas.width > canvas.height ? "100vw" : "100vh"
-  }, ${canvas.width / 2}px)`;
-  canvas.style.maxHeight = `min(${
-    canvas.width > canvas.height ? "100vh" : "100vw"
-  }, ${canvas.height / 2}px)`;
-  canvas.style.aspectRatio = `${canvas.width}/${canvas.height}`;
-  app.appendChild(canvas);
 
   // create context
   const context = canvas.getContext("2d");
@@ -34,10 +26,16 @@ import "./style.css";
     level: level,
   });
 
-  // display game stats
+  // playfield (canvas & overlay)
+  const playfield = document.createElement("div");
+  playfield.classList.add("playfield");
+  playfield.appendChild(canvas);
+  app.appendChild(playfield);
+
+  // ame stats
   const stats = document.createElement("div");
-  stats.classList.add("game-stats");
-  app.appendChild(stats);
+  stats.classList.add("stats");
+  playfield.appendChild(stats);
 
   const updateGameStats = () => {
     stats.innerHTML = `<span style="color: red">&#9829;</span> ${
@@ -49,11 +47,10 @@ import "./style.css";
     }/${level.waves.length}`;
   };
 
-  // display end screen
+  // end screen
   const overlay = document.createElement("div");
-  overlay.classList.add("game-overlay");
-  overlay.innerHTML = "Game Over";
-  app.appendChild(overlay);
+  overlay.classList.add("overlay");
+  playfield.appendChild(overlay);
 
   const showOverlay = () => {
     overlay.innerHTML =
@@ -61,32 +58,52 @@ import "./style.css";
     overlay.style.display = "flex";
   };
 
-  // display turret selection
+  // sidebar (turrets to place)
   const sidebar = document.createElement("div");
-  sidebar.classList.add("game-sidebar");
+  sidebar.classList.add("sidebar");
   app.appendChild(sidebar);
 
   for (let i = 0; i < level.turrets.length; i++) {
     const turret = level.turrets[i];
 
-    const entry = document.createElement("div");
-    entry.classList.add("entry");
+    const item = document.createElement("div");
+    item.id = `turret-${i}`;
+    item.classList.add("turret");
+    if (i == 0) item.classList.add("current");
+
     const icon = new Image();
     icon.src = turret.icon;
-    entry.appendChild(icon);
+    item.appendChild(icon);
 
-    const description = document.createElement("div");
-    description.classList.add("description");
-    description.innerHTML = `&#x1F4B0; ${turret.cost} &#x1F525; ${
-      turret.projectiles.damage
-    } ${turret.projectiles.air ? "&#9992" : ""}`;
-    entry.appendChild(description);
+    const description = document.createElement("ul");
+    description.innerHTML = `
+      <li>&#x1F4B0; ${turret.cost}</li>
+      <li>&#x1F525; ${turret.projectiles.damage}</li>
+      <li>${turret.projectiles.air ? "&#9992" : ""}</li>
+    `;
+    item.appendChild(description);
 
-    entry.onclick = () => {
+    item.onclick = () => {
       towerDefense.turretToPlaceIndex = i;
+      document
+        .querySelectorAll(".turret")
+        .forEach((t) => t.classList.remove("current"));
+      document.querySelector(`#turret-${i}`)?.classList.add("current");
     };
-    sidebar.appendChild(entry);
+    sidebar.appendChild(item);
   }
+
+  // resize canvas on window resize
+  const onResize = () => {
+    const rect = document.body.getBoundingClientRect();
+    const scaleX =
+      (rect.width - sidebar.getBoundingClientRect().width) / canvas.width;
+    const scaleY = rect.height / canvas.height;
+    canvas.style.width = `${canvas.width * Math.min(scaleX, scaleY)}px`;
+    canvas.style.height = `${canvas.height * Math.min(scaleX, scaleY)}px`;
+  };
+  onResize();
+  window.onresize = () => onResize();
 
   // run game
   (function animate() {

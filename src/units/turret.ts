@@ -19,6 +19,7 @@ export default class Turret {
   };
   projectile: Projectile | undefined;
   reloading!: number;
+  audio: { launch: string; hit: string } | undefined;
 
   public constructor(props: {
     context: CanvasRenderingContext2D;
@@ -34,6 +35,10 @@ export default class Turret {
       reloading: number;
       air?: boolean;
     };
+    audio?: {
+      launch: string;
+      hit: string;
+    };
   }) {
     // rendering
     this.context = props.context;
@@ -48,6 +53,7 @@ export default class Turret {
     this.projectiles = props.projectiles;
     this.projectile = undefined;
     this.reloading = 0;
+    this.audio = props.audio;
   }
 
   public update(intruders: Intruder[]) {
@@ -75,6 +81,10 @@ export default class Turret {
             maxDistance: this.radius,
             ...this.projectiles,
           });
+          if (this.audio) {
+            const sound = new Audio(this.audio.launch);
+            sound.play();
+          }
         }
       }
     }
@@ -85,6 +95,10 @@ export default class Turret {
         this.projectile.target.health -= this.projectiles.damage;
         this.projectile = undefined;
         this.reloading = -this.projectiles.reloading;
+        if (this.audio) {
+          const sound = new Audio(this.audio.hit);
+          sound.play();
+        }
       } else if (this.projectile.hasMissedTarget()) {
         this.projectile = undefined;
         this.reloading = -this.projectiles.reloading;

@@ -36,6 +36,10 @@ export type LevelData = {
       reloading: number;
       air?: boolean;
     };
+    audio?: {
+      launch: string;
+      hit: string;
+    };
   }[];
 };
 
@@ -162,7 +166,14 @@ export const levels: LevelData[] = [
         air: true,
       },
     ],
-    waves: [[3, 3, 3], [0], [0, 0, 1], [2, 2]],
+    waves: [
+      [0],
+      [0, 0, 1],
+      [1, 1, 1],
+      [2, 2],
+      [3, 3],
+      [1, 1, 0, 0, 2, 2, 3, 3],
+    ],
     turrets: [
       {
         image: "/turret0.png",
@@ -189,7 +200,7 @@ export const levels: LevelData[] = [
           speed: 12,
           offset: 30,
           damage: 15,
-          reloading: 16,
+          reloading: 60,
           air: true,
         },
       },
