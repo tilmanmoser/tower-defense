@@ -95,6 +95,47 @@ import "./style.css";
     sidebar.appendChild(item);
   }
 
+  const wave = document.createElement("div");
+  wave.classList.add("wave");
+  sidebar.append(wave);
+  let showWaveIndex = -1;
+  const updateWave = () => {
+    if (showWaveIndex !== towerDefense.waveIndex) {
+      showWaveIndex = towerDefense.waveIndex;
+      wave.innerHTML = "";
+
+      const currentWave = document.createElement("p");
+      currentWave.innerText = "current wave";
+      wave.append(currentWave);
+
+      level.waves[showWaveIndex].forEach((intruder) => {
+        const img = document.createElement("div");
+        img.style.backgroundImage = `url(${level.intruders[intruder].image})`;
+        img.classList.add("wave-image");
+        const item = document.createElement("div");
+        item.classList.add("wave-item");
+        item.appendChild(img);
+        wave.appendChild(item);
+      });
+
+      if (showWaveIndex < level.waves.length - 1) {
+        const nextWave = document.createElement("p");
+        nextWave.innerText = "next wave";
+        wave.append(nextWave);
+
+        level.waves[showWaveIndex + 1].forEach((intruder) => {
+          const img = document.createElement("div");
+          img.style.backgroundImage = `url(${level.intruders[intruder].image})`;
+          img.classList.add("wave-image");
+          const item = document.createElement("div");
+          item.classList.add("wave-item");
+          item.appendChild(img);
+          wave.appendChild(item);
+        });
+      }
+    }
+  };
+
   // resize canvas on window resize
   const onResize = () => {
     const rect = document.body.getBoundingClientRect();
@@ -112,6 +153,7 @@ import "./style.css";
     const handle = requestAnimationFrame(animate);
     towerDefense.update();
     updateGameStats();
+    updateWave();
     if (towerDefense.isFinished()) {
       cancelAnimationFrame(handle);
       showOverlay();

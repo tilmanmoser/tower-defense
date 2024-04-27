@@ -92,3 +92,26 @@ body {
 .turret img {
   width: 64px;
 }
+
+.wave {
+  width: 128px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+}
+
+.wave p {
+  width: 128px;
+  margin-top: 32px;
+}
+
+.wave-item {
+  width: 32px;
+  height: 32px;
+  scale: 0.25;
+}
+
+.wave-image {
+  width: 128px;
+  height: 128px;
+}

@@ -9,7 +9,7 @@ export default class TowerDefense {
   intruders: Intruder[] = [];
   turrets: Turret[] = [];
   lives: number = 10;
-  coins: number = 1000;
+  coins: number = 100;
   turretToPlaceIndex: number = 0;
   pointerPos: { x: number; y: number } | undefined;
   waveIndex: number = -1;
