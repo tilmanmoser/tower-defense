@@ -70,9 +70,9 @@ export default class TowerDefense {
   }
 
   private updateIntruders() {
-    this.intruders.sort((a, b) =>
-      a.air ? -1 : a.position.y > b.position.y ? -1 : 1
-    );
+    this.intruders
+      .sort((a, b) => b.position.y - a.position.y)
+      .sort((a, b) => (a.air ? (b.air ? 0 : -1) : 1));
     for (let i = this.intruders.length - 1; i >= 0; i--) {
       const intruder = this.intruders[i];
       if (intruder.health <= 0) {

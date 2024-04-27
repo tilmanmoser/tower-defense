@@ -58,11 +58,13 @@ export default class Turret {
 
   public update(intruders: Intruder[]) {
     // get first valid target
-    this.target = intruders.filter((intruder) => {
-      if (intruder.position.x < 0 || intruder.position.y < 0) return false;
-      if (intruder.air && !this.projectiles.air) return false;
-      return this.distanceTo(intruder) <= intruder.width / 2 + this.radius;
-    })[0];
+    this.target = intruders.filter(
+      (intruder) =>
+        intruder.position.x > 0 &&
+        intruder.position.y > 0 &&
+        intruder.air === this.projectiles.air &&
+        this.distanceTo(intruder) <= intruder.width / 2 + this.radius
+    )[0];
 
     if (this.target) {
       // orientate towards target

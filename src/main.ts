@@ -79,7 +79,7 @@ import "./style.css";
     description.innerHTML = `
       <li>&#x1F4B0; ${turret.cost}</li>
       <li>&#x1F525; ${turret.projectiles.damage}</li>
-      <li>${turret.projectiles.air ? "&#9992" : ""}</li>
+      <li>${turret.projectiles.air ? "anti air" : ""}</li>
     `;
     item.appendChild(description);
 

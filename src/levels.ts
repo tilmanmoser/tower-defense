@@ -18,8 +18,8 @@ export type LevelData = {
     waypointsIndex: number;
     health: number;
     revenue: number;
+    air: boolean;
     shadow?: number;
-    air?: boolean;
   }[];
   waves: number[][];
   turrets: {
@@ -34,7 +34,7 @@ export type LevelData = {
       offset: number;
       damage: number;
       reloading: number;
-      air?: boolean;
+      air: boolean;
     };
     audio?: {
       launch: string;
@@ -129,6 +129,7 @@ export const levels: LevelData[] = [
         waypointsIndex: 0,
         health: 100,
         revenue: 25,
+        air: false,
       },
       {
         image: "/tank0.png",
@@ -140,6 +141,7 @@ export const levels: LevelData[] = [
         waypointsIndex: 0,
         health: 300,
         revenue: 50,
+        air: false,
       },
       {
         image: "/soldier1.png",
@@ -151,6 +153,21 @@ export const levels: LevelData[] = [
         waypointsIndex: 0,
         health: 150,
         revenue: 50,
+        air: false,
+      },
+
+      {
+        image: "/plane1.png",
+        width: 128,
+        height: 128,
+        frames: 1,
+        duration: 0,
+        speed: 1,
+        waypointsIndex: 1,
+        health: 100,
+        revenue: 50,
+        shadow: 1,
+        air: true,
       },
       {
         image: "/plane0.png",
@@ -171,8 +188,8 @@ export const levels: LevelData[] = [
       [0, 0, 1],
       [1, 1, 1],
       [2, 2],
-      [3, 3],
       [1, 1, 0, 0, 2, 2, 3, 3],
+      [3, 4, 3, 4, 3, 4, 3, 4, 1, 1, 0, 0, 2, 2],
     ],
     turrets: [
       {
@@ -187,11 +204,42 @@ export const levels: LevelData[] = [
           offset: 46,
           damage: 5,
           reloading: 4,
+          air: false,
         },
       },
       {
         image: "/turret1.png",
         icon: "/turret1-icon.png",
+        cost: 100,
+        width: 128,
+        height: 128,
+        radius: 5 * 128,
+        projectiles: {
+          speed: 12,
+          offset: 30,
+          damage: 15,
+          reloading: 60,
+          air: false,
+        },
+      },
+      {
+        image: "/turret3.png",
+        icon: "/turret3-icon.png",
+        cost: 25,
+        width: 128,
+        height: 128,
+        radius: 5 * 128,
+        projectiles: {
+          speed: 8,
+          offset: 30,
+          damage: 5,
+          reloading: 8,
+          air: true,
+        },
+      },
+      {
+        image: "/turret2.png",
+        icon: "/turret2-icon.png",
         cost: 100,
         width: 128,
         height: 128,
