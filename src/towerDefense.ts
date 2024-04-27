@@ -39,8 +39,8 @@ export default class TowerDefense {
 
   public update() {
     this.drawMap();
-    this.updateIntruders();
     this.updateTurrets();
+    this.updateIntruders();
     this.drawPointer();
   }
 
@@ -70,6 +70,9 @@ export default class TowerDefense {
   }
 
   private updateIntruders() {
+    this.intruders.sort((a, b) =>
+      a.air ? -1 : a.position.y > b.position.y ? -1 : 1
+    );
     for (let i = this.intruders.length - 1; i >= 0; i--) {
       const intruder = this.intruders[i];
       if (intruder.health <= 0) {
