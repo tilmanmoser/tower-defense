@@ -9,7 +9,7 @@ export default class TowerDefense {
   intruders: Intruder[] = [];
   turrets: Turret[] = [];
   lives: number = 10;
-  coins: number = 100;
+  coins: number = 1000;
   turretToPlaceIndex: number = 0;
   pointerPos: { x: number; y: number } | undefined;
   waveIndex: number = -1;
@@ -71,7 +71,7 @@ export default class TowerDefense {
 
   private updateIntruders() {
     this.intruders
-      .sort((a, b) => b.position.y - a.position.y)
+      .sort((a, b) => a.position.y - b.position.y)
       .sort((a, b) => (a.air ? (b.air ? 0 : -1) : 1));
     for (let i = this.intruders.length - 1; i >= 0; i--) {
       const intruder = this.intruders[i];

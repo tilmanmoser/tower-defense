@@ -27,8 +27,8 @@ export default class Projectile {
 
   public update() {
     this.angle = Math.atan2(
-      this.target.position.y - this.position.y,
-      this.target.position.x - this.position.x
+      this.target.getCenter().y - this.position.y,
+      this.target.getCenter().x - this.position.x
     );
 
     const velocity = {
@@ -42,8 +42,8 @@ export default class Projectile {
 
   public hasHitTarget() {
     return (
-      Math.abs(this.target.position.x - this.position.x) <= this.speed &&
-      Math.abs(this.target.position.y - this.target.position.y) <= this.speed
+      Math.abs(this.target.getCenter().x - this.position.x) <= this.speed &&
+      Math.abs(this.target.getCenter().y - this.position.y) <= this.speed
     );
   }
 

@@ -15,7 +15,8 @@ export default class Turret {
     offset: number;
     damage: number;
     reloading: number;
-    air?: boolean;
+    air: boolean;
+    slow: number;
   };
   projectile: Projectile | undefined;
   reloading!: number;
@@ -33,7 +34,8 @@ export default class Turret {
       offset: number;
       damage: number;
       reloading: number;
-      air?: boolean;
+      air: boolean;
+      slow: number;
     };
     audio?: {
       launch: string;
@@ -58,13 +60,15 @@ export default class Turret {
 
   public update(intruders: Intruder[]) {
     // get first valid target
-    this.target = intruders.filter(
-      (intruder) =>
-        intruder.position.x > 0 &&
-        intruder.position.y > 0 &&
-        intruder.air === this.projectiles.air &&
-        this.distanceTo(intruder) <= intruder.width / 2 + this.radius
-    )[0];
+    this.target = intruders
+      .filter(
+        (intruder) =>
+          intruder.getCenter().x > 0 &&
+          intruder.getCenter().y > 0 &&
+          intruder.air === this.projectiles.air &&
+          this.distanceTo(intruder) <= intruder.width / 2 + this.radius
+      )
+      .sort((a, b) => this.distanceTo(a) - this.distanceTo(b))[0];
 
     if (this.target) {
       // orientate towards target
@@ -95,6 +99,11 @@ export default class Turret {
     if (this.projectile) {
       if (this.projectile.hasHitTarget()) {
         this.projectile.target.health -= this.projectiles.damage;
+        this.projectile.target.speed = Math.max(
+          0.51,
+          this.projectile.target.speed + this.projectiles.slow
+        );
+
         this.projectile = undefined;
         this.reloading = -this.projectiles.reloading;
         if (this.audio) {
@@ -113,8 +122,8 @@ export default class Turret {
   }
 
   private distanceTo(intruder: Intruder) {
-    const deltaX = intruder.position.x - this.position.x;
-    const deltaY = intruder.position.y - this.position.y;
+    const deltaX = intruder.getCenter().x - this.position.x;
+    const deltaY = intruder.getCenter().y - this.position.y;
     const dist = Math.hypot(deltaX, deltaY);
     return dist;
   }
