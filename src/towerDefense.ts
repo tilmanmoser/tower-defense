@@ -1,7 +1,7 @@
 import { LevelData } from "./levels";
 import Intruder from "./units/intruder";
 import Turret from "./units/turret";
-import { Howl, Howler } from "howler";
+import { Howl } from "howler";
 
 export default class TowerDefense {
   context: CanvasRenderingContext2D;
@@ -45,8 +45,8 @@ export default class TowerDefense {
     this.context.canvas.addEventListener("pointermove", (ev) =>
       this.onPointerMove(ev)
     );
-    this.context.canvas.addEventListener("pointerout", (ev) =>
-      this.onPointerOut(ev)
+    this.context.canvas.addEventListener("pointerout", () =>
+      this.onPointerOut()
     );
     this.context.canvas.addEventListener("pointerdown", (ev) =>
       this.onPointerDown(ev)
@@ -188,7 +188,7 @@ export default class TowerDefense {
     }
   }
 
-  private onPointerOut(ev: PointerEvent) {
+  private onPointerOut() {
     this.pointerPos = undefined;
   }
 
