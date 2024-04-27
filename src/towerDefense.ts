@@ -36,7 +36,7 @@ export default class TowerDefense {
       }
     }
     this.audioEffects = new Howl({
-      src: "/effects.mp3",
+      src: "/tower-defense/effects.mp3",
       sprite: sprites,
       volume: 0.5,
     });
