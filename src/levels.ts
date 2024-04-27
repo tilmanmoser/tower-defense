@@ -46,7 +46,7 @@ export type LevelData = {
 
 export const levels: LevelData[] = [
   {
-    map: "/map.png",
+    map: "/tower-defense/map.png",
     tiles: {
       cols: 20,
       rows: 20,
@@ -121,7 +121,7 @@ export const levels: LevelData[] = [
     ],
     intruders: [
       {
-        image: "/soldier0.png",
+        image: "/tower-defense/soldier0.png",
         width: 128,
         height: 128,
         frames: 4,
@@ -133,7 +133,7 @@ export const levels: LevelData[] = [
         air: false,
       },
       {
-        image: "/tank0.png",
+        image: "/tower-defense/tank0.png",
         width: 128,
         height: 128,
         frames: 8,
@@ -145,7 +145,7 @@ export const levels: LevelData[] = [
         air: false,
       },
       {
-        image: "/soldier1.png",
+        image: "/tower-defense/soldier1.png",
         width: 128,
         height: 128,
         frames: 4,
@@ -158,7 +158,7 @@ export const levels: LevelData[] = [
       },
 
       {
-        image: "/plane1.png",
+        image: "/tower-defense/plane1.png",
         width: 128,
         height: 128,
         frames: 1,
@@ -171,7 +171,7 @@ export const levels: LevelData[] = [
         air: true,
       },
       {
-        image: "/plane0.png",
+        image: "/tower-defense/plane0.png",
         width: 128,
         height: 128,
         frames: 1,
@@ -206,8 +206,8 @@ export const levels: LevelData[] = [
     ],
     turrets: [
       {
-        image: "/turret0.png",
-        icon: "/turret0-icon.png",
+        image: "/tower-defense/turret0.png",
+        icon: "/tower-defense/turret0-icon.png",
         cost: 25,
         width: 128,
         height: 128,
@@ -226,8 +226,8 @@ export const levels: LevelData[] = [
         },
       },
       {
-        image: "/turret1.png",
-        icon: "/turret1-icon.png",
+        image: "/tower-defense/turret1.png",
+        icon: "/tower-defense/turret1-icon.png",
         cost: 100,
         width: 128,
         height: 128,
@@ -247,8 +247,8 @@ export const levels: LevelData[] = [
         },
       },
       {
-        image: "/turret4.png",
-        icon: "/turret4-icon.png",
+        image: "/tower-defense/turret4.png",
+        icon: "/tower-defense/turret4-icon.png",
         cost: 100,
         width: 128,
         height: 128,
@@ -267,8 +267,8 @@ export const levels: LevelData[] = [
         },
       },
       {
-        image: "/turret3.png",
-        icon: "/turret3-icon.png",
+        image: "/tower-defense/turret3.png",
+        icon: "/tower-defense/turret3-icon.png",
         cost: 25,
         width: 128,
         height: 128,
@@ -287,8 +287,8 @@ export const levels: LevelData[] = [
         },
       },
       {
-        image: "/turret2.png",
-        icon: "/turret2-icon.png",
+        image: "/tower-defense/turret2.png",
+        icon: "/tower-defense/turret2-icon.png",
         cost: 100,
         width: 128,
         height: 128,
