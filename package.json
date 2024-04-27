@@ -9,10 +9,12 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/howler": "^2.2.11",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
   },
   "dependencies": {
-    "@fontsource/zen-dots": "^5.0.20"
+    "@fontsource/zen-dots": "^5.0.20",
+    "howler": "^2.2.4"
   }
 }

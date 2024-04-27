@@ -37,9 +37,9 @@ export type LevelData = {
       air: boolean;
       slow: number;
     };
-    audio?: {
-      launch: string;
-      hit: string;
+    audio: {
+      launch: [number, number];
+      hit: [number, number];
     };
   }[];
 };
@@ -221,8 +221,8 @@ export const levels: LevelData[] = [
           slow: 0,
         },
         audio: {
-          launch: "/turret0-launch.mp3",
-          hit: "/turret0-hit.mp3",
+          launch: [0, 200],
+          hit: [200, 400],
         },
       },
       {
@@ -240,9 +240,10 @@ export const levels: LevelData[] = [
           air: false,
           slow: 0,
         },
+
         audio: {
-          launch: "/turret1-launch.mp3",
-          hit: "/turret1-hit.mp3",
+          launch: [600, 650],
+          hit: [1300, 750],
         },
       },
       {
@@ -261,8 +262,8 @@ export const levels: LevelData[] = [
           slow: -0.5,
         },
         audio: {
-          launch: "/turret2-launch.mp3",
-          hit: "/turret2-hit.mp3",
+          launch: [2100, 700],
+          hit: [2800, 500],
         },
       },
       {
@@ -281,8 +282,8 @@ export const levels: LevelData[] = [
           slow: 0,
         },
         audio: {
-          launch: "/turret3-launch.mp3",
-          hit: "/turret3-hit.mp3",
+          launch: [3300, 600],
+          hit: [3900, 500],
         },
       },
       {
@@ -301,8 +302,8 @@ export const levels: LevelData[] = [
           slow: 0,
         },
         audio: {
-          launch: "/turret4-launch.mp3",
-          hit: "/turret4-hit.mp3",
+          launch: [4400, 500],
+          hit: [4900, 470],
         },
       },
     ],

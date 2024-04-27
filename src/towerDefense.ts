@@ -1,6 +1,7 @@
 import { LevelData } from "./levels";
 import Intruder from "./units/intruder";
 import Turret from "./units/turret";
+import { Howl, Howler } from "howler";
 
 export default class TowerDefense {
   context: CanvasRenderingContext2D;
@@ -13,6 +14,7 @@ export default class TowerDefense {
   turretToPlaceIndex: number = 0;
   pointerPos: { x: number; y: number } | undefined;
   waveIndex: number = -1;
+  audioEffects: Howl;
 
   public constructor(props: {
     context: CanvasRenderingContext2D;
@@ -24,6 +26,20 @@ export default class TowerDefense {
     // create map image
     this.map = new Image();
     this.map.src = this.level.map;
+
+    // create audio effects
+    const sprites: { [key: string]: [number, number] } = {};
+    for (let i = 0; i < this.level.turrets.length; i++) {
+      if (this.level.turrets[i].audio) {
+        sprites[`launch${i}`] = this.level.turrets[i].audio!.launch;
+        sprites[`hit${i}`] = this.level.turrets[i].audio!.hit;
+      }
+    }
+    this.audioEffects = new Howl({
+      src: "/effects.mp3",
+      sprite: sprites,
+      volume: 0.5,
+    });
 
     // eventlistener
     this.context.canvas.addEventListener("pointermove", (ev) =>
@@ -163,7 +179,9 @@ export default class TowerDefense {
       this.turrets.push(
         new Turret({
           context: this.context,
+          turretIndex: this.turretToPlaceIndex,
           ...this.level.turrets[this.turretToPlaceIndex],
+          audioEffects: this.audioEffects,
           position: this.pointerPos,
         })
       );
